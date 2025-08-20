@@ -1,0 +1,548 @@
+basePath: /api
+definitions:
+  models.Attendance:
+    properties:
+      checked_in_at:
+        example: "2023-01-01T09:15:00Z"
+        type: string
+      created_at:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      email:
+        example: student@example.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      phone:
+        example: "0123456789"
+        type: string
+      session:
+        $ref: '#/definitions/models.AttendanceSession'
+      session_id:
+        example: 1
+        type: integer
+      student_name:
+        example: Nguyen Van A
+        type: string
+      work_unit:
+        example: Phong IT
+        type: string
+      work_unit_address:
+        example: 123 Nguyen Trai, Q1, HCM
+        type: string
+    type: object
+  models.AttendanceSession:
+    properties:
+      attendances:
+        items:
+          $ref: '#/definitions/models.Attendance'
+        type: array
+      class:
+        $ref: '#/definitions/models.Class'
+      class_id:
+        example: 1
+        type: integer
+      created_at:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      session_date:
+        example: "2023-01-01T09:00:00Z"
+        type: string
+      teacher:
+        $ref: '#/definitions/models.Teacher'
+      teacher_id:
+        example: 1
+        type: integer
+    type: object
+  models.Class:
+    properties:
+      class_code:
+        example: IT001
+        type: string
+      class_name:
+        example: Lap trinh Web
+        type: string
+      created_at:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      students:
+        items:
+          $ref: '#/definitions/models.Student'
+        type: array
+    type: object
+  models.CreateStudentRequest:
+    properties:
+      class_id:
+        example: 1
+        type: integer
+      email:
+        example: user@example.com
+        type: string
+      student_code:
+        example: SV001
+        type: string
+      student_name:
+        example: Nguyen Van A
+        type: string
+    type: object
+  models.CreateTeacherRequest:
+    properties:
+      teacher_code:
+        example: GV001
+        type: string
+      teacher_name:
+        example: Nguyen Thi B
+        type: string
+    type: object
+  models.Student:
+    properties:
+      class:
+        $ref: '#/definitions/models.Class'
+      class_id:
+        example: 1
+        type: integer
+      created_at:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      date_of_birth:
+        example: "2000-01-01T00:00:00Z"
+        type: string
+      email:
+        example: student@example.com
+        type: string
+      id:
+        example: 1
+        type: integer
+      phone:
+        example: "0123456789"
+        type: string
+      school_name:
+        example: Dai hoc Bach Khoa
+        type: string
+      student_code:
+        example: SV001
+        type: string
+      student_name:
+        example: Nguyen Van A
+        type: string
+    type: object
+  models.Teacher:
+    properties:
+      created_at:
+        example: "2023-01-01T00:00:00Z"
+        type: string
+      id:
+        example: 1
+        type: integer
+      teacher_code:
+        example: GV001
+        type: string
+      teacher_name:
+        example: Nguyen Thi B
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: This is a simple student management server.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Student Management API
+  version: "1.0"
+paths:
+  /attendance-sessions:
+    get:
+      description: Get all attendance sessions with class and teacher information
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.AttendanceSession'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all attendance sessions
+      tags:
+      - attendance-sessions
+  /attendance-sessions/{id}:
+    get:
+      description: Get a specific attendance session with class, teacher, and attendances
+      parameters:
+      - description: Attendance Session ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.AttendanceSession'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get attendance session by ID
+      tags:
+      - attendance-sessions
+  /attendances:
+    get:
+      description: Get all attendance records with session information
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Attendance'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all attendances
+      tags:
+      - attendances
+  /attendances/{id}:
+    get:
+      description: Get a specific attendance record with session information
+      parameters:
+      - description: Attendance ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Attendance'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get attendance by ID
+      tags:
+      - attendances
+  /classes:
+    get:
+      description: Get all classes from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Class'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all classes
+      tags:
+      - classes
+    post:
+      consumes:
+      - application/json
+      description: Create a new class in the database
+      parameters:
+      - description: Class data
+        in: body
+        name: class
+        required: true
+        schema:
+          $ref: '#/definitions/models.Class'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Class'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new class
+      tags:
+      - classes
+  /classes/{id}:
+    get:
+      description: Get a specific class with its students
+      parameters:
+      - description: Class ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Class'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get class by ID
+      tags:
+      - classes
+  /health:
+    get:
+      consumes:
+      - application/json
+      description: Check if the application and database are running
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Health check
+      tags:
+      - health
+  /sessions/{sessionId}/attendances:
+    get:
+      description: Get all attendance records for a specific session
+      parameters:
+      - description: Session ID
+        in: path
+        name: sessionId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Attendance'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get attendances by session ID
+      tags:
+      - attendances
+  /students:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all students
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Student'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all students
+      tags:
+      - students
+    post:
+      consumes:
+      - application/json
+      description: Create a new student in the database
+      parameters:
+      - description: Student data
+        in: body
+        name: student
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateStudentRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Student'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new student
+      tags:
+      - students
+  /teachers:
+    get:
+      description: Get all teachers from the database
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Teacher'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all teachers
+      tags:
+      - teachers
+    post:
+      consumes:
+      - application/json
+      description: Create a new teacher in the database
+      parameters:
+      - description: Teacher data
+        in: body
+        name: teacher
+        required: true
+        schema:
+          $ref: '#/definitions/models.CreateTeacherRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/models.Teacher'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new teacher
+      tags:
+      - teachers
+  /teachers/{id}:
+    get:
+      description: Get a specific teacher by ID
+      parameters:
+      - description: Teacher ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Teacher'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get teacher by ID
+      tags:
+      - teachers
+swagger: "2.0"
