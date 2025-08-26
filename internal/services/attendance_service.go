@@ -17,6 +17,10 @@ func GetAttendancesBySessionID(sessionID int) ([]models.Attendance, error) {
 	return repository.GetAttendancesBySessionID(sessionID)
 }
 
+func GetAttendancesByEventID(eventID uint) ([]models.Attendance, error) {
+	return repository.GetAttendancesByEventID(eventID)
+}
+
 func CreateAttendance(attendance *models.Attendance) error {
 	return repository.CreateAttendance(attendance)
 }

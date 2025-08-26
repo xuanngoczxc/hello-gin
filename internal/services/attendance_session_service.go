@@ -13,6 +13,10 @@ func GetAttendanceSessionByID(id int) (*models.AttendanceSession, error) {
 	return repository.GetAttendanceSessionByID(id)
 }
 
+func GetAttendanceSessionsByEventID(eventID uint) ([]models.AttendanceSession, error) {
+	return repository.GetAttendanceSessionsByEventID(eventID)
+}
+
 func CreateAttendanceSession(session *models.AttendanceSession) error {
 	return repository.CreateAttendanceSession(session)
 }

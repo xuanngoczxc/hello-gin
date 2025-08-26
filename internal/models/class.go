@@ -1,17 +1,27 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 // Class represents a class in the system
 type Class struct {
-	ID        int       `json:"id" gorm:"primaryKey" example:"1"`
-	ClassCode *string   `json:"class_code" example:"IT001"`
-	ClassName *string   `json:"class_name" example:"Lap trinh Web"`
-	CreatedAt time.Time `json:"created_at" example:"2023-01-01T00:00:00Z"`
-	Students  []Student `json:"students,omitempty" gorm:"foreignKey:ClassID"`
+	ID        uint           `gorm:"primaryKey" json:"id"`
+	CreatedAt time.Time      `json:"created_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
+	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
+
+	ClassCode *string `json:"class_code"`
+	ClassName *string `json:"class_name"`
+
+	// Relationships
+	Students []Student           `gorm:"foreignKey:ClassID" json:"students,omitempty"`
+	Sessions []AttendanceSession `gorm:"foreignKey:ClassID" json:"sessions,omitempty"`
 }
 
-// TableName overrides the table name used by Class to `Class`
+// TableName sets the table name for Class model
 func (Class) TableName() string {
-	return "Class"
+	return "classes"
 }

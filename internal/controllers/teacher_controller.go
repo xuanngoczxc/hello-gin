@@ -96,6 +96,10 @@ func CreateTeacher(c *gin.Context) {
 	teacher := models.Teacher{
 		TeacherCode: req.TeacherCode,
 		TeacherName: req.TeacherName,
+		Phone:       req.Phone,
+		Email:       req.Email,
+		WorkUnit:    req.WorkUnit,
+		DateOfBirth: req.DateOfBirth,
 	}
 
 	if err := services.CreateTeacher(&teacher); err != nil {

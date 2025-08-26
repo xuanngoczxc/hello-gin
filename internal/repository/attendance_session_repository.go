@@ -7,17 +7,29 @@ import (
 
 func GetAllAttendanceSessions() ([]models.AttendanceSession, error) {
 	var sessions []models.AttendanceSession
-	result := config.DB.Preload("Class").Preload("Teacher").Preload("Attendances").Find(&sessions)
+	result := config.DB.Preload("Event").Preload("Class").Preload("Teacher").Preload("Attendances").Find(&sessions)
 	return sessions, result.Error
 }
 
 func GetAttendanceSessionByID(id int) (*models.AttendanceSession, error) {
 	var session models.AttendanceSession
-	result := config.DB.Preload("Class").Preload("Teacher").Preload("Attendances").First(&session, id)
+	result := config.DB.Preload("Event").Preload("Class").Preload("Teacher").Preload("Attendances").First(&session, id)
 	if result.Error != nil {
 		return nil, result.Error
 	}
 	return &session, nil
+}
+
+func GetAttendanceSessionsByEventID(eventID uint) ([]models.AttendanceSession, error) {
+	var sessions []models.AttendanceSession
+	result := config.DB.
+		Preload("Event").
+		Preload("Class").
+		Preload("Teacher").
+		Preload("Attendances").
+		Where("event_id = ?", eventID).
+		Find(&sessions)
+	return sessions, result.Error
 }
 
 func CreateAttendanceSession(session *models.AttendanceSession) error {

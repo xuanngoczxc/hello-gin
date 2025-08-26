@@ -1,16 +1,30 @@
 package models
 
-import "time"
+import (
+	"time"
+
+	"gorm.io/gorm"
+)
 
 // Teacher represents a teacher in the system
 type Teacher struct {
-	ID          int       `json:"id" gorm:"primaryKey" example:"1"`
-	CreatedAt   time.Time `json:"created_at" example:"2023-01-01T00:00:00Z"`
-	TeacherCode *string   `json:"teacher_code" example:"GV001"`
-	TeacherName *string   `json:"teacher_name" example:"Nguyen Thi B"`
+	ID        uint           `gorm:"primaryKey" json:"id"`
+	CreatedAt time.Time      `json:"created_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
+	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
+
+	TeacherCode *string    `json:"teacher_code"`
+	TeacherName *string    `json:"teacher_name"`
+	Phone       *string    `json:"phone"`
+	Email       *string    `json:"email"`
+	WorkUnit    *string    `json:"work_unit"`
+	DateOfBirth *time.Time `json:"date_of_birth"`
+
+	// Relationships
+	Sessions []AttendanceSession `gorm:"foreignKey:TeacherID" json:"sessions,omitempty"`
 }
 
-// TableName overrides the table name used by Teacher to `Teacher`
+// TableName sets the table name for Teacher model
 func (Teacher) TableName() string {
-	return "Teacher"
+	return "teachers"
 }

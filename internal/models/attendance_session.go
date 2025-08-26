@@ -1,20 +1,31 @@
 package models
 
-import "time"
+import (
+	"time"
 
-// AttendanceSession represents an attendance session in the system
+	"gorm.io/gorm"
+)
+
+// AttendanceSession represents an attendance session
 type AttendanceSession struct {
-	ID          int          `json:"id" gorm:"primaryKey" example:"1"`
-	CreatedAt   time.Time    `json:"created_at" example:"2023-01-01T00:00:00Z"`
-	ClassID     *int         `json:"class_id" example:"1"`
-	TeacherID   *int         `json:"teacher_id" example:"1"`
-	SessionDate *time.Time   `json:"session_date" example:"2023-01-01T09:00:00Z"`
-	Class       *Class       `json:"class,omitempty" gorm:"foreignKey:ClassID"`
-	Teacher     *Teacher     `json:"teacher,omitempty" gorm:"foreignKey:TeacherID"`
-	Attendances []Attendance `json:"attendances,omitempty" gorm:"foreignKey:SessionID"`
+	ID        uint           `gorm:"primaryKey" json:"id"`
+	CreatedAt time.Time      `json:"created_at"`
+	UpdatedAt time.Time      `json:"updated_at"`
+	DeletedAt gorm.DeletedAt `gorm:"index" json:"-"`
+
+	EventID     *uint      `json:"event_id"`
+	ClassID     *uint      `json:"class_id"`
+	TeacherID   *uint      `json:"teacher_id"`
+	SessionDate *time.Time `json:"session_date"`
+
+	// Relationships
+	Event       *Event       `json:"event,omitempty"`
+	Class       *Class       `json:"class,omitempty"`
+	Teacher     *Teacher     `json:"teacher,omitempty"`
+	Attendances []Attendance `gorm:"foreignKey:SessionID" json:"attendances,omitempty"`
 }
 
 // TableName overrides the table name used by AttendanceSession
 func (AttendanceSession) TableName() string {
-	return "AttendanceSession"
+	return "attendance_sessions"
 }

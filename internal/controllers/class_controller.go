@@ -77,19 +77,25 @@ func GetClassByID(c *gin.Context) {
 // @Tags classes
 // @Accept json
 // @Produce json
-// @Param class body models.Class true "Class data"
+// @Param class body models.CreateClassRequest true "Class data"
 // @Success 201 {object} models.Class
 // @Failure 400 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
 // @Router /classes [post]
 func CreateClass(c *gin.Context) {
-	var class models.Class
-	if err := c.ShouldBindJSON(&class); err != nil {
+	var request models.CreateClassRequest
+	if err := c.ShouldBindJSON(&request); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error":   "Invalid request data",
 			"message": err.Error(),
 		})
 		return
+	}
+
+	// Create class from DTO
+	class := models.Class{
+		ClassCode: &request.ClassCode,
+		ClassName: &request.ClassName,
 	}
 
 	if err := services.CreateClass(&class); err != nil {

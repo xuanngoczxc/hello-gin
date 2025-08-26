@@ -53,7 +53,10 @@ func CreateStudent(c *gin.Context) {
 		StudentCode: req.StudentCode,
 		StudentName: req.StudentName,
 		ClassID:     req.ClassID,
+		Phone:       req.Phone,
 		Email:       req.Email,
+		WorkUnit:    req.WorkUnit,
+		DateOfBirth: req.DateOfBirth,
 	}
 
 	if err := services.CreateStudent(&student); err != nil {

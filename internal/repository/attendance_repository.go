@@ -26,6 +26,19 @@ func GetAttendancesBySessionID(sessionID int) ([]models.Attendance, error) {
 	return attendances, result.Error
 }
 
+func GetAttendancesByEventID(eventID uint) ([]models.Attendance, error) {
+	var attendances []models.Attendance
+	result := config.DB.
+		Preload("Session").
+		Preload("Session.Class").
+		Preload("Session.Teacher").
+		Preload("Session.Event").
+		Joins("JOIN attendance_sessions ON attendances.session_id = attendance_sessions.id").
+		Where("attendance_sessions.event_id = ?", eventID).
+		Find(&attendances)
+	return attendances, result.Error
+}
+
 func CreateAttendance(attendance *models.Attendance) error {
 	result := config.DB.Create(attendance)
 	return result.Error

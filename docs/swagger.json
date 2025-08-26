@@ -28,6 +28,14 @@
                     "attendance-sessions"
                 ],
                 "summary": "Get all attendance sessions",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Filter by Event ID",
+                        "name": "event_id",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -36,6 +44,52 @@
                             "items": {
                                 "$ref": "#/definitions/models.AttendanceSession"
                             }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new attendance session in the database",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "attendance-sessions"
+                ],
+                "summary": "Create a new attendance session",
+                "parameters": [
+                    {
+                        "description": "Attendance session data",
+                        "name": "session",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CreateAttendanceSessionRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.AttendanceSession"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     },
                     "500": {
@@ -116,6 +170,52 @@
                             "items": {
                                 "$ref": "#/definitions/models.Attendance"
                             }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new attendance record",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "attendances"
+                ],
+                "summary": "Create a new attendance",
+                "parameters": [
+                    {
+                        "description": "Attendance data",
+                        "name": "attendance",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CreateAttendanceRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "$ref": "#/definitions/models.Attendance"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
                         }
                     },
                     "500": {
@@ -226,7 +326,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Class"
+                            "$ref": "#/definitions/models.CreateClassRequest"
                         }
                     }
                 ],
@@ -296,6 +396,303 @@
                     },
                     "500": {
                         "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/events": {
+            "get": {
+                "description": "Get a list of all events",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "events"
+                ],
+                "summary": "Get all events",
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new event with the provided information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "events"
+                ],
+                "summary": "Create a new event",
+                "parameters": [
+                    {
+                        "description": "Event data",
+                        "name": "event",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CreateEventRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "success",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/events/{id}": {
+            "get": {
+                "description": "Get a single event by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "events"
+                ],
+                "summary": "Get event by ID",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Event ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update an existing event with the provided information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "events"
+                ],
+                "summary": "Update an event",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Event ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "Event data",
+                        "name": "event",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.CreateEventRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete an event by its ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "events"
+                ],
+                "summary": "Delete an event",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Event ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
+        "/events/{id}/attendances": {
+            "get": {
+                "responses": {}
+            }
+        },
+        "/events/{id}/sessions": {
+            "get": {
+                "description": "Get a single event by its ID including all attendance sessions",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "events"
+                ],
+                "summary": "Get event with sessions",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Event ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "success",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "400": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "404": {
+                        "description": "error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    },
+                    "500": {
+                        "description": "error",
                         "schema": {
                             "type": "object",
                             "additionalProperties": true
@@ -592,43 +989,42 @@
             "type": "object",
             "properties": {
                 "checked_in_at": {
-                    "type": "string",
-                    "example": "2023-01-01T09:15:00Z"
+                    "type": "string"
                 },
                 "created_at": {
-                    "type": "string",
-                    "example": "2023-01-01T00:00:00Z"
+                    "type": "string"
                 },
                 "email": {
-                    "type": "string",
-                    "example": "student@example.com"
+                    "type": "string"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
                 },
                 "phone": {
-                    "type": "string",
-                    "example": "0123456789"
+                    "type": "string"
                 },
                 "session": {
-                    "$ref": "#/definitions/models.AttendanceSession"
+                    "description": "Relationships",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.AttendanceSession"
+                        }
+                    ]
                 },
                 "session_id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
                 },
                 "student_name": {
-                    "type": "string",
-                    "example": "Nguyen Van A"
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
                 },
                 "work_unit": {
-                    "type": "string",
-                    "example": "Phong IT"
+                    "type": "string"
                 },
                 "work_unit_address": {
-                    "type": "string",
-                    "example": "123 Nguyen Trai, Q1, HCM"
+                    "type": "string"
                 }
             }
         },
@@ -645,27 +1041,36 @@
                     "$ref": "#/definitions/models.Class"
                 },
                 "class_id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
                 },
                 "created_at": {
-                    "type": "string",
-                    "example": "2023-01-01T00:00:00Z"
+                    "type": "string"
+                },
+                "event": {
+                    "description": "Relationships",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.Event"
+                        }
+                    ]
+                },
+                "event_id": {
+                    "type": "integer"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
                 },
                 "session_date": {
-                    "type": "string",
-                    "example": "2023-01-01T09:00:00Z"
+                    "type": "string"
                 },
                 "teacher": {
                     "$ref": "#/definitions/models.Teacher"
                 },
                 "teacher_id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
+                },
+                "updated_at": {
+                    "type": "string"
                 }
             }
         },
@@ -673,26 +1078,124 @@
             "type": "object",
             "properties": {
                 "class_code": {
-                    "type": "string",
-                    "example": "IT001"
+                    "type": "string"
                 },
                 "class_name": {
-                    "type": "string",
-                    "example": "Lap trinh Web"
+                    "type": "string"
                 },
                 "created_at": {
-                    "type": "string",
-                    "example": "2023-01-01T00:00:00Z"
+                    "type": "string"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
+                },
+                "sessions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.AttendanceSession"
+                    }
                 },
                 "students": {
+                    "description": "Relationships",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/models.Student"
                     }
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "models.CreateAttendanceRequest": {
+            "type": "object",
+            "required": [
+                "email",
+                "phone",
+                "session_id",
+                "student_name",
+                "work_unit",
+                "work_unit_address"
+            ],
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "student@example.com"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "0123456789"
+                },
+                "session_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "student_name": {
+                    "type": "string",
+                    "example": "Nguyen Van A"
+                },
+                "work_unit": {
+                    "type": "string",
+                    "example": "Công ty ABC"
+                },
+                "work_unit_address": {
+                    "type": "string",
+                    "example": "123 Đường ABC, Quận 1, TP.HCM"
+                }
+            }
+        },
+        "models.CreateAttendanceSessionRequest": {
+            "type": "object",
+            "properties": {
+                "class_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "event_id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "session_date": {
+                    "type": "string",
+                    "example": "2025-08-20T08:31:46.121Z"
+                },
+                "teacher_id": {
+                    "type": "string",
+                    "example": "1"
+                }
+            }
+        },
+        "models.CreateClassRequest": {
+            "type": "object",
+            "required": [
+                "class_code",
+                "class_name"
+            ],
+            "properties": {
+                "class_code": {
+                    "type": "string",
+                    "example": "LOP001"
+                },
+                "class_name": {
+                    "type": "string",
+                    "example": "Lớp Khoa học máy tính K65"
+                }
+            }
+        },
+        "models.CreateEventRequest": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "example": "Workshop về trí tuệ nhân tạo"
+                },
+                "event_name": {
+                    "type": "string",
+                    "example": "Workshop AI"
+                },
+                "start_date": {
+                    "type": "string",
+                    "example": "2023-01-01T00:00:00Z"
                 }
             }
         },
@@ -703,9 +1206,17 @@
                     "type": "integer",
                     "example": 1
                 },
+                "date_of_birth": {
+                    "type": "string",
+                    "example": "2000-01-01T00:00:00Z"
+                },
                 "email": {
                     "type": "string",
                     "example": "user@example.com"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "0123456789"
                 },
                 "student_code": {
                     "type": "string",
@@ -714,12 +1225,28 @@
                 "student_name": {
                     "type": "string",
                     "example": "Nguyen Van A"
+                },
+                "work_unit": {
+                    "type": "string",
+                    "example": "Công ty ABC"
                 }
             }
         },
         "models.CreateTeacherRequest": {
             "type": "object",
             "properties": {
+                "date_of_birth": {
+                    "type": "string",
+                    "example": "1980-01-01T00:00:00Z"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "teacher@example.com"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "0123456789"
+                },
                 "teacher_code": {
                     "type": "string",
                     "example": "GV001"
@@ -727,6 +1254,40 @@
                 "teacher_name": {
                     "type": "string",
                     "example": "Nguyen Thi B"
+                },
+                "work_unit": {
+                    "type": "string",
+                    "example": "Trường Đại học ABC"
+                }
+            }
+        },
+        "models.Event": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "event_name": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "sessions": {
+                    "description": "Relationships",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.AttendanceSession"
+                    }
+                },
+                "start_date": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
                 }
             }
         },
@@ -734,43 +1295,42 @@
             "type": "object",
             "properties": {
                 "class": {
-                    "$ref": "#/definitions/models.Class"
+                    "description": "Relationships",
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/models.Class"
+                        }
+                    ]
                 },
                 "class_id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
                 },
                 "created_at": {
-                    "type": "string",
-                    "example": "2023-01-01T00:00:00Z"
+                    "type": "string"
                 },
                 "date_of_birth": {
-                    "type": "string",
-                    "example": "2000-01-01T00:00:00Z"
+                    "type": "string"
                 },
                 "email": {
-                    "type": "string",
-                    "example": "student@example.com"
+                    "type": "string"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
                 },
                 "phone": {
-                    "type": "string",
-                    "example": "0123456789"
-                },
-                "school_name": {
-                    "type": "string",
-                    "example": "Dai hoc Bach Khoa"
+                    "type": "string"
                 },
                 "student_code": {
-                    "type": "string",
-                    "example": "SV001"
+                    "type": "string"
                 },
                 "student_name": {
-                    "type": "string",
-                    "example": "Nguyen Van A"
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "work_unit": {
+                    "type": "string"
                 }
             }
         },
@@ -778,20 +1338,38 @@
             "type": "object",
             "properties": {
                 "created_at": {
-                    "type": "string",
-                    "example": "2023-01-01T00:00:00Z"
+                    "type": "string"
+                },
+                "date_of_birth": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
                 },
                 "id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "integer"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "sessions": {
+                    "description": "Relationships",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/models.AttendanceSession"
+                    }
                 },
                 "teacher_code": {
-                    "type": "string",
-                    "example": "GV001"
+                    "type": "string"
                 },
                 "teacher_name": {
-                    "type": "string",
-                    "example": "Nguyen Thi B"
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                },
+                "work_unit": {
+                    "type": "string"
                 }
             }
         }
