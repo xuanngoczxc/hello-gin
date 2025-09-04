@@ -240,3 +240,107 @@ func (c *EventController) DeleteEvent(ctx *gin.Context) {
 		"message": "Event deleted successfully",
 	})
 }
+
+// GetActiveEvents retrieves all active events
+// @Summary Get all active events
+// @Description Get a list of all active events
+// @Tags events
+// @Accept json
+// @Produce json
+// @Success 200 {object} map[string]interface{} "success"
+// @Failure 500 {object} map[string]interface{} "error"
+// @Router /events/active [get]
+func (c *EventController) GetActiveEvents(ctx *gin.Context) {
+	events, err := c.eventService.GetActiveEvents()
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{
+			"error":   "Failed to retrieve active events",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Active events retrieved successfully",
+		"data":    events,
+		"count":   len(events),
+	})
+}
+
+// ToggleEventActive sets the active status of an event
+// @Summary Set event active status
+// @Description Set the active status of an event by its ID (1 = active, 0 = inactive)
+// @Tags events
+// @Accept json
+// @Produce json
+// @Param id path int true "Event ID"
+// @Param active body object{active=int} true "Active status (1 = active, 0 = inactive)"
+// @Success 200 {object} map[string]interface{} "success"
+// @Failure 400 {object} map[string]interface{} "error"
+// @Failure 404 {object} map[string]interface{} "error"
+// @Failure 500 {object} map[string]interface{} "error"
+// @Router /events/{id}/active [put]
+func (c *EventController) EventActive(ctx *gin.Context) {
+	idParam := ctx.Param("id")
+	id, err := strconv.ParseUint(idParam, 10, 32)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Invalid event ID",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	// Parse request body to get active status
+	var request struct {
+		Active *int `json:"active"`
+	}
+
+	if err := ctx.ShouldBindJSON(&request); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Invalid request body format",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	// Check if active field is provided
+	if request.Active == nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Missing required field 'active'",
+			"message": "Request body must include 'active' field with value 0 or 1",
+		})
+		return
+	}
+
+	// Validate active value (must be 0 or 1)
+	if *request.Active != 0 && *request.Active != 1 {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Invalid active value. Must be 0 (inactive) or 1 (active)",
+			"message": "Active value must be either 0 or 1",
+		})
+		return
+	}
+
+	// Convert to boolean
+	isActive := *request.Active == 1
+
+	event, err := c.eventService.SetEventActive(uint(id), isActive)
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, gin.H{
+			"error":   "Event not found or failed to update active status",
+			"message": err.Error(),
+		})
+		return
+	}
+
+	status := "deactivated"
+	if event.IsActive != nil && *event.IsActive {
+		status = "activated"
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{
+		"message": "Event " + status + " successfully",
+		"data":    event,
+	})
+}

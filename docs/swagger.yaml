@@ -200,8 +200,9 @@ definitions:
         type: string
       id:
         type: integer
+      is_active:
+        type: boolean
       sessions:
-        description: Relationships
         items:
           $ref: '#/definitions/models.AttendanceSession'
         type: array
@@ -700,6 +701,52 @@ paths:
       summary: Update an event
       tags:
       - events
+  /events/{id}/active:
+    put:
+      consumes:
+      - application/json
+      description: Set the active status of an event by its ID (1 = active, 0 = inactive)
+      parameters:
+      - description: Event ID
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Active status (1 = active, 0 = inactive)
+        in: body
+        name: active
+        required: true
+        schema:
+          properties:
+            active:
+              type: integer
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            additionalProperties: true
+            type: object
+        "400":
+          description: error
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: error
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Set event active status
+      tags:
+      - events
   /events/{id}/attendances:
     get:
       responses: {}
@@ -738,6 +785,27 @@ paths:
             additionalProperties: true
             type: object
       summary: Get event with sessions
+      tags:
+      - events
+  /events/active:
+    get:
+      consumes:
+      - application/json
+      description: Get a list of all active events
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: success
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all active events
       tags:
       - events
   /health:

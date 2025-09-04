@@ -56,3 +56,16 @@ func (m *MockEventService) DeleteEvent(id uint) error {
 	args := m.Called(id)
 	return args.Error(0)
 }
+
+func (m *MockEventService) GetActiveEvents() ([]models.Event, error) {
+	args := m.Called()
+	return args.Get(0).([]models.Event), args.Error(1)
+}
+
+func (m *MockEventService) SetEventActive(id uint, isActive bool) (*models.Event, error) {
+	args := m.Called(id, isActive)
+	if args.Get(0) == nil {
+		return nil, args.Error(1)
+	}
+	return args.Get(0).(*models.Event), args.Error(1)
+}

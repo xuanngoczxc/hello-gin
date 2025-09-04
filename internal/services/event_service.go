@@ -76,3 +76,26 @@ func (s *EventService) UpdateEvent(id uint, req *models.CreateEventRequest) (*mo
 func (s *EventService) DeleteEvent(id uint) error {
 	return s.eventRepo.Delete(id)
 }
+
+// GetActiveEvents retrieves all active events
+func (s *EventService) GetActiveEvents() ([]models.Event, error) {
+	return s.eventRepo.GetActiveEvents()
+}
+
+// SetEventActive sets the active status of an event
+func (s *EventService) SetEventActive(id uint, isActive bool) (*models.Event, error) {
+	event, err := s.eventRepo.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	// Set the specific active status
+	event.IsActive = &isActive
+
+	err = s.eventRepo.Update(event)
+	if err != nil {
+		return nil, err
+	}
+
+	return event, nil
+}

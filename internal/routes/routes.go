@@ -11,11 +11,13 @@ func RegisterRoutes(r *gin.Engine, eventController *controllers.EventController)
 	{
 		// Event routes
 		api.GET("/events", eventController.GetEvents)
+		api.GET("/events/active", eventController.GetActiveEvents)
 		api.GET("/events/:id", eventController.GetEventByID)
 		api.GET("/events/:id/sessions", eventController.GetEventWithSessions)
 		api.GET("/events/:id/attendances", controllers.GetAttendancesByEventID)
 		api.POST("/events", eventController.CreateEvent)
 		api.PUT("/events/:id", eventController.UpdateEvent)
+		api.PUT("/events/:id/active", eventController.EventActive)
 		api.DELETE("/events/:id", eventController.DeleteEvent)
 
 		// Student routes
